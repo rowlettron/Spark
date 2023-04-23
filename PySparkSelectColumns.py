@@ -59,3 +59,39 @@ df.select('*').show()
 df.select(df.columns[:3]).show(3)
 #Selects columns 2 to 4 and top 3 rows
 df.select(df.columns[2:4]).show(3)
+
+#Select from nested struct columns
+data = [
+    (('James',None,'Smith'),'OH','M'),
+    (('Anna','Rose',''), 'NY', 'F'),
+    (('Julia','','Williams'),'OH','F'),
+    (('Maria','Anne','Jones'),'NY','F'),
+    (('Jen','Mary','Brown'),'NY','M'),
+    (('Mike','Mary','Williams'),'OH','M')
+]
+
+from pyspark.sql.types import StructType, StructField, StringType
+
+schema = StructType([
+    StructField('name', StructType([
+        StructField('firstname', StringType(), True),
+        StructField('middlename', StringType(), True),
+        StructField('lastname', StringType(), True)
+    ])),
+    StructField('state', StringType(), True),
+    StructField('gender', StringType(), True)
+])
+
+df2 = spark.createDataFrame(data=data,schema=schema)
+df2.printSchema()
+df2.show(truncate=False)
+
+#select struct column
+df2.select('name').show(truncate=False)
+
+#select specific columns from struct column
+df2.select('name.firstname','name.lastname').show(truncate=False)
+df2.select('name.*').show(truncate=False)
+
+
+
