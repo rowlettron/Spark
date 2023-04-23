@@ -51,7 +51,7 @@ print('Spark App Name: ' + spark.sparkContext.appName)
 # print(rdd.collect())
 
 # Commonly used variables
-print(applicationID)
+# print(applicationID)
 # print(spark.version)
 # print(spark.uiWebUrl)
 
