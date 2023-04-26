@@ -46,11 +46,21 @@ data = [("James", "Sales", 3000), \
 # Create DataFrame
 columns= ["employee_name", "department", "salary"]
 df = spark.createDataFrame(data = data, schema = columns)
-df.printSchema()
-df.show(truncate=False)
+# df.printSchema()
+# df.show(truncate=False)
 
 #Get distinct rows
 distinctDF = df.distinct()
-print('Distinct count: ' + str(distinctDF.count()))
-distinctDF.show(truncate=False)
+# print('Distinct count: ' + str(distinctDF.count()))
+# distinctDF.show(truncate=False)
+
+df2 = df.dropDuplicates()
+print('Distinct count: ' + str(df2.count()))
+df2.show(truncate=False)
+
+
+#PySpark distinct of selected multiple columns
+dropDisDF = df.dropDuplicates(['department','salary'])
+print('Distinct count of department and salary: ' + str(dropDisDF.count()))
+dropDisDF.show(truncate=False)
 
