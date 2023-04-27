@@ -16,7 +16,7 @@ def clearConsole():
 import pyspark
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, ArrayType, MapType
-from pyspark.sql.functions import col, struct, when, lit, expr
+from pyspark.sql.functions import col, struct, when, lit, expr, sum, avg, max, min, mean, count
 from pyspark.sql import Row
 
 from sys import platform
@@ -55,6 +55,25 @@ df.groupBy('department').min('salary').show(truncate=False)
 df.groupBy('department').max('salary').show(truncate=False)
 df.groupBy('department').avg('salary').show(truncate=False)
 df.groupBy('department').mean('salary').show(truncate=False)
+
+#Using multiple columns
+df.groupBy('department','state').sum('salary','bonus').show(truncate=False)
+
+#running more aggregrates at one time
+df.groupBy('department').agg(sum('salary').alias('sum_salary'), \
+                             avg('salary').alias('avg_salary'), \
+                             sum('bonus').alias('sum_bonus'), \
+                             max('bonus').alias('max_bonus') \
+                            ).show(truncate=False)
+
+from pyspark.sql.functions import sum,avg,max
+df.groupBy("department") \
+    .agg(sum("salary").alias("sum_salary"), \
+      avg("salary").alias("avg_salary"), \
+      sum("bonus").alias("sum_bonus"), \
+      max("bonus").alias("max_bonus")) \
+    .where(col("sum_bonus") >= 50000) \
+    .show(truncate=False)
 
 
 
